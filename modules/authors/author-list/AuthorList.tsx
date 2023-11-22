@@ -10,6 +10,7 @@ import LoadingOverlay from "../../../components/LoadingOverlay";
 
 import AuthorCreateModal from "../author-create-modal";
 import AuthorUpdateModal from "../author-update-modal";
+import AuthorDeleteModal from "../author-delete-modal";
 
 const { Title } = Typography;
 
@@ -40,6 +41,7 @@ const columns = [
 function AuthorList() {
   const [isOpenCreateModal, setOpenCreateModal] = useState<boolean>(false);
   const [isOpenUpdateModal, setOpenUpdateModal] = useState<boolean>(false);
+  const [isOpenDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
 
   const {
     authors,
@@ -71,8 +73,22 @@ function AuthorList() {
     setSelectedAuthor(undefined);
   };
 
+  const handleOpenDeleteModal = (id: string) => {
+    setOpenDeleteModal(true);
+    setSelectedAuthor(id);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+    setSelectedAuthor(undefined);
+  };
+
   const handleSubmitUpdateModal = () => {
     setOpenUpdateModal(false);
+  };
+
+  const handleSubmitDeleteModal = () => {
+    setOpenDeleteModal(false);
   };
 
   const renderAuthorList = useCallback(() => {
@@ -101,12 +117,21 @@ function AuthorList() {
       employed: (
         <div className="ant-employed">
           <span>{dayjs(author.employed).format("DD/MM/YYYY")}</span>
-          <Button
-            type="link"
-            onClick={handleOpenUpdateModal.bind(null, author.id)}
-          >
-            Update
-          </Button>
+          <div className="ant-action">
+            <Button
+              type="link"
+              onClick={handleOpenUpdateModal.bind(null, author.id)}
+            >
+              Update
+            </Button>
+            <Button
+              type="link"
+              danger
+              onClick={handleOpenDeleteModal.bind(null, author.id)}
+            >
+              Delete
+            </Button>
+          </div>
         </div>
       ),
     }));
@@ -142,6 +167,14 @@ function AuthorList() {
           author={author as Author}
           onCancel={handleCloseUpdateModal}
           onOk={handleSubmitUpdateModal}
+        />
+      )}
+
+      {isOpenDeleteModal && author && (
+        <AuthorDeleteModal
+          author={author as Author}
+          onCancel={handleCloseDeleteModal}
+          onOk={handleSubmitDeleteModal}
         />
       )}
 

@@ -1,6 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { createAuthor, getAuthor, getAuthors, updateAuthor } from "./api";
+import {
+  createAuthor,
+  deleteAuthor,
+  getAuthor,
+  getAuthors,
+  updateAuthor,
+} from "./api";
 
 export function useGetAuthors() {
   return useQuery({
@@ -29,6 +35,15 @@ export function useCreateAuthor() {
 export function useUpdateAuthor() {
   return useMutation({
     mutationFn: updateAuthor,
+    onError(error, variables, context) {
+      console.error(error);
+    },
+  });
+}
+
+export function useDeleteAuthor() {
+  return useMutation({
+    mutationFn: deleteAuthor,
     onError(error, variables, context) {
       console.error(error);
     },

@@ -13,9 +13,28 @@ export async function getAuthor(id: string) {
 }
 
 export async function createAuthor(formData: Author) {
-  return await api.post("/authors", formData);
+  return new Promise((resolve) => {
+    setTimeout(async () => {
+      const response = await api.post("/authors", formData);
+      resolve(response);
+    }, 3000);
+  });
 }
 
 export async function updateAuthor(formData: Author) {
-  return await api.put(`/authors/${formData.id}`, formData);
+  return new Promise((resolve) => {
+    setTimeout(async () => {
+      const response = await api.put(`/authors/${formData.id}`, formData);
+      resolve(response);
+    }, 3000);
+  });
+}
+
+export async function deleteAuthor(id: string) {
+  return new Promise((resolve) => {
+    setTimeout(async () => {
+      const response = await api.get(`/authors/${id}`);
+      resolve(response);
+    }, 3000);
+  });
 }
