@@ -4,12 +4,12 @@ import { FormProvider } from "react-hook-form";
 
 import useAuthorCreateAction from "./AuthorCreateModal.action";
 
-import AuthorForm from "../author-form/AuthorForm";
+import AuthorForm from "../author-form";
 
 function AuthorCreateModal(props: ModalProps) {
   const { onOk, ...rest } = props;
 
-  const { methods, onSubmit } = useAuthorCreateAction();
+  const { methods, isLoading, onSubmit } = useAuthorCreateAction();
 
   const handleSubmit = (e: MouseEvent<HTMLElement>) => {
     onSubmit().then(() => {
@@ -24,6 +24,9 @@ function AuthorCreateModal(props: ModalProps) {
         title="Create author"
         okText="Create"
         onOk={handleSubmit}
+        okButtonProps={{
+          loading: isLoading,
+        }}
       >
         <AuthorForm />
       </Modal>

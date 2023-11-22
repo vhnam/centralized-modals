@@ -6,7 +6,7 @@ import { Author } from "../../../models/Author.model";
 
 import useAuthorUpdateAction from "./AuthorUpdateModal.action";
 
-import AuthorForm from "../author-form/AuthorForm";
+import AuthorForm from "../author-form";
 
 interface AuthorUpdateModalProps extends ModalProps {
   author: Author;

@@ -1,5 +1,6 @@
 import { createAvatar } from "@dicebear/core";
 import { adventurer } from "@dicebear/collection";
+import { faker } from "@faker-js/faker";
 
 const seed = [
   "Callie",
@@ -36,4 +37,10 @@ export function generateAvatar() {
   });
 
   return avatar.toDataUriSync();
+}
+
+export function generateAnimalImage() {
+  return faker.image.urlLoremFlickr({
+    category: "animal",
+  });
 }
