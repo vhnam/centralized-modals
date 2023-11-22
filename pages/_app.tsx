@@ -6,7 +6,7 @@ import queryClient from "../utils/queryClient";
 
 import "../styles/App.less";
 
-const DynamicModal = dynamic(() => import("../components/Modal"), {
+const DynamicModalManager = dynamic(() => import("../components/Modal"), {
   ssr: false,
 });
 
@@ -17,7 +17,7 @@ function App(props: AppProps) {
     <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />
 
-      <DynamicModal />
+      <DynamicModalManager />
     </QueryClientProvider>
   );
 }

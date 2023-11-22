@@ -9,7 +9,9 @@ import useAnimalListAction from "./AnimalList.action";
 import LoadingOverlay from "../../../components/LoadingOverlay";
 import { openModal } from "../../../components/Modal";
 
-import animalCreateModal from "../animal-create-modal";
+import AnimalCreateModal from "../animal-create-modal";
+import AnimalUpdateModal from "../animal-update-modal";
+import animalDeleteModal from "../animal-delete-modal";
 
 const { Title } = Typography;
 
@@ -28,13 +30,8 @@ const columns = [
 ];
 
 function AnimalList() {
-  const {
-    animals,
-    animal,
-    isLoadingGetAnimals,
-    isLoadingGetAnimal,
-    setSelectedAnimal,
-  } = useAnimalListAction();
+  const { animals, isLoadingGetAnimals, isLoadingGetAnimal } =
+    useAnimalListAction();
 
   const {
     methods,
@@ -63,8 +60,17 @@ function AnimalList() {
       ),
       action: (
         <div className="ant-action">
-          <Button type="link">Update</Button>
-          <Button type="link" danger>
+          <Button
+            type="link"
+            onClick={handleOpenUpdateAnimalModal.bind(null, animal)}
+          >
+            Update
+          </Button>
+          <Button
+            type="link"
+            danger
+            onClick={handleOpenDeleteAnimalModal.bind(null, animal)}
+          >
             Delete
           </Button>
         </div>
@@ -73,10 +79,22 @@ function AnimalList() {
   }, [animals]);
 
   const handleOpenCreateAnimalModal = () => {
-    openModal(animalCreateModal, {
+    openModal(AnimalCreateModal, {
       methods,
       isLoading: isLoadingCreateAnimal,
       onSubmit: handleSubmitCreateAnimal,
+    });
+  };
+
+  const handleOpenUpdateAnimalModal = (animal: Animal) => {
+    openModal(AnimalUpdateModal, {
+      animal,
+    });
+  };
+
+  const handleOpenDeleteAnimalModal = (animal: Animal) => {
+    openModal(animalDeleteModal, {
+      animal,
     });
   };
 

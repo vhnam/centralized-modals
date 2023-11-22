@@ -3,7 +3,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import modalStore from "../../stores/modalStore";
 
-function Modals() {
+function ModalManager() {
   const { modals, closeModal } = useStore(
     modalStore,
     useShallow((state) => ({
@@ -35,4 +35,4 @@ function Modals() {
   );
 }
 
-export default Modals;
+export default ModalManager;

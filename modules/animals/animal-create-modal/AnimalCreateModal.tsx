@@ -4,6 +4,7 @@ import { FormProvider, UseFormReturn } from "react-hook-form";
 import { AnimalForm as AnimalFormType } from "../animal-form/AnimalForm.schema";
 
 import AnimalForm from "../animal-form";
+import { useEffect } from "react";
 
 interface AnimalCreateModalProps extends ModalProps {
   isLoading: boolean;
@@ -20,12 +21,19 @@ function AnimalCreateModal(props: AnimalCreateModalProps) {
     });
   };
 
+  useEffect(() => {
+    return () => {
+      methods.reset();
+    };
+  }, []);
+
   return (
     <FormProvider {...methods}>
       <Modal
         {...rest}
         title="Create animal"
         okText="Create"
+        onCancel={onCancel}
         onOk={handleSubmit}
         okButtonProps={{
           loading: isLoading,

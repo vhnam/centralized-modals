@@ -26,11 +26,26 @@ const modalStore = createStore<ModalStore>((set) => ({
       ],
     }));
   },
-  closeModal: (modalID) => {
+  closeModal: (modalId) => {
     set((state) => ({
       ...state,
-      modals: state.modals.filter((modal) => modal.id !== modalID),
+      modals: state.modals.map((modal) => {
+        if (modal.id === modalId) {
+          return {
+            ...modal,
+            isOpen: false,
+          };
+        }
+        return modal;
+      }),
     }));
+
+    setTimeout(() => {
+      set((state) => ({
+        ...state,
+        modals: state.modals.filter((modal) => modal.id !== modalId),
+      }));
+    }, 500);
   },
   closeAll: () => {
     set((state) => ({

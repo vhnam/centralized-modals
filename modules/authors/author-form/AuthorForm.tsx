@@ -1,5 +1,6 @@
 import { Switch } from "antd";
 import dayjs, { Dayjs } from "dayjs";
+import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 import DatePicker from "../../../components/DatePicker";
@@ -7,11 +8,17 @@ import TextField from "../../../components/TextField";
 
 function AuthorForm() {
   const formContext = useFormContext();
-  const { control } = formContext;
+  const { control, reset } = formContext;
 
   const disabledDate = (current: Dayjs) => {
     return current && current > dayjs().endOf("day");
   };
+
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, []);
 
   return (
     <div>

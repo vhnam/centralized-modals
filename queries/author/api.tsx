@@ -33,7 +33,7 @@ export async function updateAuthor(formData: Author) {
 export async function deleteAuthor(id: string) {
   return new Promise((resolve) => {
     setTimeout(async () => {
-      const response = await api.get(`/authors/${id}`);
+      const response = await api.delete(`/authors/${id}`);
       resolve(response);
     }, 3000);
   });

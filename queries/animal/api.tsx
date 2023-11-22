@@ -33,7 +33,7 @@ export async function updateAnimal(formData: Animal) {
 export async function deleteAnimal(id: string) {
   return new Promise((resolve) => {
     setTimeout(async () => {
-      const response = await api.get(`/animals/${id}`);
+      const response = await api.delete(`/animals/${id}`);
       resolve(response);
     }, 3000);
   });
