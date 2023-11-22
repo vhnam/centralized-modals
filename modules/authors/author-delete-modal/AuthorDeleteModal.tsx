@@ -1,8 +1,9 @@
 import { Modal, ModalProps, Typography } from "antd";
+import { MouseEvent } from "react";
 
 import { Author } from "../../../models/Author.model";
+
 import useAuthorDeleteAction from "./AuthorDeleteModal.action";
-import { MouseEvent } from "react";
 
 const { Text } = Typography;
 

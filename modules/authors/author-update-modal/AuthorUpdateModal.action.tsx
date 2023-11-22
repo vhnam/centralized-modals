@@ -3,8 +3,6 @@ import { notification } from "antd";
 import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
 
-import useInvalidateUrl from "../../../hooks/useInvalidateUrl";
-
 import { Author } from "../../../models/Author.model";
 
 import { useUpdateAuthor } from "../../../queries/author";
@@ -21,20 +19,20 @@ function useAuthorUpdateAction(author: Author) {
   });
 
   const { mutate, isLoading } = useUpdateAuthor();
-  const invalidateAuthors = useInvalidateUrl("get-authors");
-  const invalidateAuthor = useInvalidateUrl("get-author");
 
   const onSubmit = methods.handleSubmit((formData: AuthorForm) => {
-    mutate(formData as Author, {
-      onSuccess: (res) => {
-        invalidateAuthors();
-        invalidateAuthor();
+    return new Promise((resolve, reject) => {
+      mutate(formData as Author, {
+        onSuccess: (res) => {
+          notification.success({
+            message: "Update author successfully!",
+            duration: 5,
+          });
 
-        notification.success({
-          message: "Update author successfully!",
-          duration: 5,
-        });
-      },
+          resolve(res);
+        },
+        onError: reject,
+      });
     });
   });
 

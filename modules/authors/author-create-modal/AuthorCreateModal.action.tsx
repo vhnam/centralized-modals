@@ -4,7 +4,6 @@ import dayjs, { Dayjs } from "dayjs";
 import { useForm } from "react-hook-form";
 
 import { generateAvatar } from "../../../utils/avatar";
-import queryClient from "../../../utils/queryClient";
 
 import { Author } from "../../../models/Author.model";
 
@@ -26,22 +25,26 @@ function useAuthorCreateAction() {
   const onSubmit = methods.handleSubmit((formData: AuthorForm) => {
     const avatar = generateAvatar();
 
-    mutate(
-      {
-        ...formData,
-        avatar,
-        employed: (formData.employed as Dayjs).toDate(),
-      } as Author,
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["get-authors"] });
-          notification.success({
-            message: "Create author successfully!",
-            duration: 5,
-          });
-        },
-      }
-    );
+    return new Promise((resolve, reject) => {
+      mutate(
+        {
+          ...formData,
+          avatar,
+          employed: (formData.employed as Dayjs).toDate(),
+        } as Author,
+        {
+          onSuccess: (res) => {
+            notification.success({
+              message: "Create author successfully!",
+              duration: 5,
+            });
+
+            resolve(res);
+          },
+          onError: reject,
+        }
+      );
+    });
   });
 
   return {

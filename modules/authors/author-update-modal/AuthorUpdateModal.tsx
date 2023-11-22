@@ -15,7 +15,7 @@ interface AuthorUpdateModalProps extends ModalProps {
 function AuthorUpdateModal(props: AuthorUpdateModalProps) {
   const { author, onOk, ...rest } = props;
 
-  const { methods, onSubmit } = useAuthorUpdateAction(author);
+  const { methods, isLoading, onSubmit } = useAuthorUpdateAction(author);
 
   const handleSubmit = (e: MouseEvent<HTMLElement>) => {
     onSubmit().then(() => {
@@ -31,6 +31,9 @@ function AuthorUpdateModal(props: AuthorUpdateModalProps) {
         title="Update Author"
         okText="Update"
         onOk={handleSubmit}
+        okButtonProps={{
+          loading: isLoading,
+        }}
       >
         <AuthorForm />
       </Modal>
