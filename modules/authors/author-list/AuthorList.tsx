@@ -6,7 +6,10 @@ import { Author } from "../../../models/Author.model";
 
 import useAuthorListAction from "./AuthorList.action";
 
-import AuthorCreateModal from "../author-create-modal/AuthorCreateModal";
+import LoadingOverlay from "../../../components/LoadingOverlay";
+
+import AuthorCreateModal from "../author-create-modal";
+import AuthorUpdateModal from "../author-update-modal";
 
 const { Title } = Typography;
 
@@ -22,7 +25,6 @@ const columns = [
     dataIndex: "function",
     key: "function",
   },
-
   {
     title: "STATUS",
     key: "status",
@@ -37,8 +39,15 @@ const columns = [
 
 function AuthorList() {
   const [isOpenCreateModal, setOpenCreateModal] = useState<boolean>(false);
+  const [isOpenUpdateModal, setOpenUpdateModal] = useState<boolean>(false);
 
-  const { data, isLoading } = useAuthorListAction();
+  const {
+    authors,
+    author,
+    isLoadingGetAuthors,
+    isLoadingGetAuthor,
+    setSelectedAuthor,
+  } = useAuthorListAction();
 
   const handleOpenCreateModal = () => {
     setOpenCreateModal(true);
@@ -52,12 +61,26 @@ function AuthorList() {
     setOpenCreateModal(false);
   };
 
-  const render = useCallback(() => {
-    if (!data) {
+  const handleOpenUpdateModal = (id: string) => {
+    setOpenUpdateModal(true);
+    setSelectedAuthor(id);
+  };
+
+  const handleCloseUpdateModal = () => {
+    setOpenUpdateModal(false);
+    setSelectedAuthor(undefined);
+  };
+
+  const handleSubmitUpdateModal = () => {
+    setOpenUpdateModal(false);
+  };
+
+  const renderAuthorList = useCallback(() => {
+    if (!authors) {
       return [];
     }
 
-    return data.map((author: Author) => ({
+    return authors.map((author: Author) => ({
       key: author.id,
       name: (
         <Avatar.Group>
@@ -78,11 +101,16 @@ function AuthorList() {
       employed: (
         <div className="ant-employed">
           <span>{dayjs(author.employed).format("DD/MM/YYYY")}</span>
-          <a href="#pablo">Update</a>
+          <Button
+            type="link"
+            onClick={handleOpenUpdateModal.bind(null, author.id)}
+          >
+            Update
+          </Button>
         </div>
       ),
     }));
-  }, [data]);
+  }, [authors]);
 
   return (
     <>
@@ -96,9 +124,9 @@ function AuthorList() {
         }
       >
         <Table
-          loading={isLoading}
+          loading={isLoadingGetAuthors}
           columns={columns}
-          dataSource={render()}
+          dataSource={renderAuthorList()}
           pagination={false}
         />
       </Card>
@@ -108,6 +136,16 @@ function AuthorList() {
         onCancel={handleCloseCreateModal}
         onOk={handleSubmitCreateModal}
       />
+
+      {isOpenUpdateModal && author && (
+        <AuthorUpdateModal
+          author={author as Author}
+          onCancel={handleCloseUpdateModal}
+          onOk={handleSubmitUpdateModal}
+        />
+      )}
+
+      {isLoadingGetAuthor && <LoadingOverlay />}
     </>
   );
 }

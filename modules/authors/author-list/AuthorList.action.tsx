@@ -1,11 +1,33 @@
-import { useGetAuthors } from "../../../queries/author";
+import { useEffect, useState } from "react";
+
+import { useGetAuthor, useGetAuthors } from "../../../queries/author";
 
 function useAuthorListAction() {
-  const { data, isLoading } = useGetAuthors();
+  const [selectedAuthor, setSelectedAuthor] = useState<string>();
+
+  const {
+    data: authors,
+    isLoading: isLoadingGetAuthors,
+    fetchStatus: fetchStatusGetAuthors,
+  } = useGetAuthors();
+  const {
+    data: author,
+    isLoading: isLoadingGetAuthor,
+    refetch: refetchAuthor,
+  } = useGetAuthor(selectedAuthor);
+
+  useEffect(() => {
+    if (selectedAuthor) {
+      refetchAuthor();
+    }
+  }, [selectedAuthor]);
 
   return {
-    data,
-    isLoading,
+    authors,
+    author,
+    isLoadingGetAuthors,
+    isLoadingGetAuthor: isLoadingGetAuthor && fetchStatusGetAuthors !== "idle",
+    setSelectedAuthor,
   };
 }
 

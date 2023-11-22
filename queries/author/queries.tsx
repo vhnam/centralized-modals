@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { createAuthor, getAuthors } from "./api";
+import { createAuthor, getAuthor, getAuthors, updateAuthor } from "./api";
 
 export function useGetAuthors() {
   return useQuery({
@@ -9,9 +9,26 @@ export function useGetAuthors() {
   });
 }
 
+export function useGetAuthor(id?: string) {
+  return useQuery({
+    queryKey: ["get-author", id],
+    queryFn: getAuthor.bind(null, id),
+    enabled: false,
+  });
+}
+
 export function useCreateAuthor() {
   return useMutation({
     mutationFn: createAuthor,
+    onError(error, variables, context) {
+      console.error(error);
+    },
+  });
+}
+
+export function useUpdateAuthor() {
+  return useMutation({
+    mutationFn: updateAuthor,
     onError(error, variables, context) {
       console.error(error);
     },
